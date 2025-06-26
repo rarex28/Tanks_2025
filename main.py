@@ -1,7 +1,7 @@
 import random
 import time
 import pygame
-from Tanks_2025 import models
+import models
 import sys
 import asyncio
 import math
@@ -14,12 +14,12 @@ def draw_trajectory(screen, tank, angle_deg, power, wind, color=(255, 0, 0)):
     vy = -v * math.sin(angle)
 
     points = []
-    g = 1.5
+    g = 5
 
-    for t in range(0, 120):
+    for t in range(0, 120): #pana la 2 secunde cu pas de 0.1
         time_sec = t * 0.1
-        xt = x0 + vx * time_sec + wind * time_sec
-        yt = y0 + vy * time_sec + 0.5 * g * (time_sec) ** 2
+        xt = x0 + vx * time_sec + wind * time_sec   #influentarea vantului
+        yt = y0 + vy * time_sec + 0.5 * g * (time_sec) ** 2 #gravitate clasica
 
         if yt > 600 or xt < 0 or xt > 895:
             break
@@ -54,13 +54,14 @@ async def main():
                'create game button': models.Button(screen, (370, 360), (160, 30), 'CREATE GAME', False),
                }
 
+    '''buclă de meniu'''
     while True:
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
 
-
+        '''configurarea meniului'''
         background = pygame.image.load("static/mountains.jpg").convert()
         screen.blit(background, (0, 0))
         title_text_down = pygame.font.Font('freesansbold.ttf', 50).render("TANKS", False, YELLOW)
@@ -72,7 +73,7 @@ async def main():
         title_text_rect_up.center = (447, 47)
         screen.blit(title_text_up, title_text_rect_up)
 
-
+        '''animatia la tancuri'''
         tank1 = models.Tank(100, 500, RED)
         tank1.gun_direction = 40
         tank2 = models.Tank(800, 500, GREEN)
@@ -95,6 +96,7 @@ async def main():
                 time.sleep(0.001)
             weapon = None
 
+        '''crearea meniului'''
         for button_key in buttons.keys():
             buttons[button_key].draw()
         game = None
@@ -119,6 +121,7 @@ async def main():
         if buttons['create game button'].clicked():
             game = models.Game(screen, num_of_players, num_of_rounds)
 
+        '''bucla jocului'''
         charging_power = False
         if game:
             exit_game_loop = False
@@ -126,6 +129,7 @@ async def main():
                 if exit_game_loop:
                     break
 
+                '''configurarea rundei'''
                 for c, player in enumerate(game.players):
                     if c%2==0:
                         tank_spawn_point = random.randint(450,800)
@@ -148,6 +152,7 @@ async def main():
                 change_weapon_right = models.Button(screen, (400, 45), (15, 15), '->', True)
                 change_weapon_left = models.Button(screen, (130, 45), (15, 15), '<-', True)
 
+                '''ecranul de pornire al rundei'''
                 screen.blit(background, (0, 0))
                 run_round = True
                 round_num_text_down = pygame.font.Font('freesansbold.ttf', 50).render(f"ROUND {round+1}", False, YELLOW)
@@ -167,13 +172,14 @@ async def main():
                 if charging_power:
                     tank = game.players[player_turn].tank
                     if tank.shot_power < tank.max_shot_power:
-                        tank.shot_power += 0.5
+                        tank.shot_power += 0.2
                 pygame.display.update()
                 await asyncio.sleep(0)
-                time.sleep(3)
+                time.sleep(5)
                 player_turn = 0
                 game.dying_order.clear()
 
+                '''bucla runda'''
                 while run_round:
                     for event in pygame.event.get():
                         if event.type == pygame.QUIT:
@@ -182,6 +188,7 @@ async def main():
                                 game.players[player_turn].weapons[current_weapon][1] > 0:
                              charging_power = True
 
+                        #se trage cand se elibereaza space
                     if event.type == pygame.KEYUP and event.key == pygame.K_SPACE and weapon is None and charging_power:
                         charging_power = False
                         weapon = game.players[player_turn].tank.shot(
@@ -189,12 +196,14 @@ async def main():
                         game.players[player_turn].weapons[current_weapon][1] -= 1
                         game.players[player_turn].tank.shot_power = 0
 
+                    ''' desenarea fundalului si a solului '''
                     screen.blit(background, (0, 0))
                     for column in game.board:
                         for pixel in column:
                             if pixel.ground:
                                 pygame.draw.rect(screen, (139, 69, 19), (pixel.x, pixel.y, 3, 3))
 
+                    '''chenarul de optiuni'''
                     options_position = (20, 20)
                     options_top_rect = pygame.Rect(options_position[0], options_position[1], 418, 50)
                     options_bottom_rect = pygame.Rect(options_position[0] + 2, options_position[1] + 5, 418, 50)
@@ -233,19 +242,24 @@ async def main():
                         try:
                             tank = game.players[player_turn].tank
                             if tank:
+                                # dimensiuni si pozitie bara
                                 bar_x = 20
                                 bar_y = 90
                                 bar_width = 150
                                 bar_height = 15
 
+                                # calcul latime umplere proportionala cu putere
                                 filled_width = int((tank.shot_power / tank.max_shot_power) * bar_width)
 
+                                # fundal bara
                                 pygame.draw.rect(screen, (50, 50, 50),
-                                                 (bar_x, bar_y, bar_width, bar_height))
+                                                 (bar_x, bar_y, bar_width, bar_height)) #gri inchis
+                                # umplere bara
                                 pygame.draw.rect(screen, (255, 0, 0), (bar_x, bar_y, filled_width, bar_height))
-
+                                # contur
                                 pygame.draw.rect(screen, (0, 0, 0), (bar_x, bar_y, bar_width, bar_height), 2)
 
+                                # text explicativ
                                 font = pygame.font.SysFont('freesansbold.ttf', 15)
                                 label = font.render(f'Power: {int(tank.shot_power)}', True, (0, 0, 0))
                                 screen.blit(label, (bar_x + bar_width + 10, bar_y - 2))
@@ -272,6 +286,7 @@ async def main():
                     change_weapon_left.draw()
                     change_weapon_right.draw()
 
+                    ''' chenarul cu punctaj al playerului'''
                     stats_position = (470, 20)
                     stats_top_rect = pygame.Rect(stats_position[0], stats_position[1], 390, len(game.players)*30)
                     stats_bottom_rect = pygame.Rect(stats_position[0] + 2, stats_position[1] + 5, 390, len(game.players*30))
@@ -301,6 +316,7 @@ async def main():
                         text_rect.y += 25 + 30*c
                         screen.blit(player_data, text_rect)
 
+                    '''caderea tancului si distrugerea daca iese in afara ferestrei'''
                     for player in game.players:
                         tank = player.tank
                         if tank:
@@ -322,6 +338,7 @@ async def main():
                     if game.players[player_turn].tank == None:
                         player_turn = game.next_turn(player_turn)
 
+                    '''miscarea tevii'''
                     if weapon != None:
                         if 0 < weapon.x < 900 and 0 < weapon.y < 600:
                             if game.board[int(weapon.y/3)][int(weapon.x/3)].ground == True:
@@ -337,21 +354,42 @@ async def main():
                             wind = random.randint(-10, 10)
                             player_turn = game.next_turn(player_turn)
 
+                    '''intrarea utilizatorului'''
                     try:
                         keys = pygame.key.get_pressed()
-                        if keys[pygame.K_LEFT] and game.players[player_turn].tank.fuel > 0:
-                            game.players[player_turn].tank.move(-1)
-                            game.players[player_turn].tank.fuel -= 0.1
-                            time.sleep(0.02)
-                        if keys[pygame.K_RIGHT] and game.players[player_turn].tank.fuel > 0:
-                            game.players[player_turn].tank.move(1)
-                            game.players[player_turn].tank.fuel -= 0.1
-                            time.sleep(0.02)
-                        if keys[pygame.K_UP]:
-                            game.players[player_turn].tank.move_gun(1)
-                        if keys[pygame.K_DOWN]:
-                            game.players[player_turn].tank.move_gun(-1)
+                        tank = game.players[player_turn].tank
 
+                        # player 1 (taste săgeți)
+                        if player_turn == 0:
+                            if keys[pygame.K_LEFT] and tank.fuel > 0:
+                                tank.move(-1)
+                                tank.fuel -= 0.1
+                                time.sleep(0.02)
+                            if keys[pygame.K_RIGHT] and tank.fuel > 0:
+                                tank.move(1)
+                                tank.fuel -= 0.1
+                                time.sleep(0.02)
+                            if keys[pygame.K_UP]:
+                                tank.move_gun(1)
+                            if keys[pygame.K_DOWN]:
+                                tank.move_gun(-1)
+
+                        # player 2 (taste w a s d)
+                        if player_turn == 1:
+                            if keys[pygame.K_a] and tank.fuel > 0:
+                                tank.move(-1)
+                                tank.fuel -= 0.1
+                                time.sleep(0.02)
+                            if keys[pygame.K_d] and tank.fuel > 0:
+                                tank.move(1)
+                                tank.fuel -= 0.1
+                                time.sleep(0.02)
+                            if keys[pygame.K_w]:
+                                tank.move_gun(1)
+                            if keys[pygame.K_s]:
+                                tank.move_gun(-1)
+
+                        # se trage cand se elibereaza space
 
                         '''if shot_button.clicked() and weapon == None and game.players[player_turn].weapons[current_weapon][1] > 0:
                             weapon = game.players[player_turn].tank.shot(game.players[player_turn].weapons[current_weapon][0])
@@ -384,13 +422,14 @@ async def main():
                     if charging_power:
                         tank = game.players[player_turn].tank
                         if tank.shot_power < tank.max_shot_power:
-                            tank.shot_power += 0.1
+                            tank.shot_power += 0.2
                     if charging_power:
                         tank = game.players[player_turn].tank
                         draw_trajectory(screen, tank, tank.gun_direction, tank.shot_power, wind)
                     pygame.display.update()
                     await asyncio.sleep(0)
 
+                    ''' verificarea stării finale a rundei '''
                     players_alive = sum((1 if player.tank != None else 0 for player in game.players))
                     if players_alive == 1:
                         for c, player in enumerate(game.dying_order):
@@ -401,6 +440,7 @@ async def main():
                     await asyncio.sleep(0)
                 await asyncio.sleep(0)
 
+            '''afișarea rezultatelor finale'''
             ranking = sorted(game.players, key=lambda player : player.score, reverse=True)
             screen.blit(background, (0, 0))
             winner_text_down = pygame.font.Font('freesansbold.ttf', 30).render("WINNER", False, YELLOW)
@@ -419,15 +459,15 @@ async def main():
             second_text_rect = second_text.get_rect()
             second_text_rect.center = (450, 250)
             screen.blit(second_text, second_text_rect)
-            if len(game.players) > 2:
+            '''if len(game.players) > 2:
                 third_text = pygame.font.Font('freesansbold.ttf', 15).render(f"3rd {ranking[2]}", False, ranking[2].color)
                 third_text_rect = third_text.get_rect()
                 third_text_rect.center = (450, 280)
-                screen.blit(third_text, third_text_rect)
+                screen.blit(third_text, third_text_rect)'''
             if charging_power:
                 tank = game.players[player_turn].tank
                 if tank.shot_power < tank.max_shot_power:
-                    tank.shot_power += 0.1
+                    tank.shot_power += 0.2
             pygame.display.update()
             await asyncio.sleep(0)
             time.sleep(5)
@@ -438,7 +478,7 @@ async def main():
         if charging_power:
             tank = game.players[player_turn].tank
             if tank.shot_power < tank.max_shot_power:
-                tank.shot_power += 0.1
+                tank.shot_power += 0.2
         pygame.display.update()
         await asyncio.sleep(0)
 
