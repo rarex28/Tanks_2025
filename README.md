@@ -1,11 +1,11 @@
 # Tanks
-Un joc 2D cu tancuri inspirat de clasicul Tanks, dezvoltat în Python folosind biblioteca Pygame.                                                                                                         
+Este un joc 2D cu tancuri inspirat de clasicul Tanks, dezvoltat în Python folosind biblioteca Pygame.                                                                                                         
 Proiectul permite mai multor jucători să se confrunte pe un teren generat procedural, utilizând diferite tipuri de arme, afectate de factori externi precum direcția și intensitatea vântului.
                                                                                                                                                                                                 
 Caracteristici:	
-    Teren generat cu funcții trigonometrice pentru diversitate;
-    Traiectorii curbate influențate de un sistem de vânt;
-    Patru tipuri de arme cu rază și putere diferită:
+    -Teren generat cu funcții trigonometrice pentru diversitate;
+    -Traiectorii curbate influențate de un sistem de vânt;
+    -Patru tipuri de arme cu rază și putere diferită:
         Missle,
         Severe Missle,
         Small Atom Bomb,
