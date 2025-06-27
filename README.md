@@ -12,10 +12,10 @@ Proiectul permite mai multor jucători să se confrunte pe un teren generat proc
 - 🗺️ **Teren generat procedural** folosind funcții trigonometrice pentru diversitate.
 - 💨 **Traiectorii curbate**, influențate de un sistem de **vânt dinamic**.
 - 💣 **Patru tipuri de arme** cu rază și putere diferită:
-  - `Missile`
-  - `Severe Missile`
-  - `Small Atom Bomb`
-  - `Atom Bomb`
+  - Missile
+  - Severe Missile
+  - Small Atom Bomb
+  - Atom Bomb
 - 🛡️ **Sănătate**, **combustibil** și **putere de tragere** variabilă pentru fiecare tanc.
 - 🔄 **Sistem de rundă și scoruri** între mai mulți jucători.
 
