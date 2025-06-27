@@ -14,6 +14,8 @@ def draw_trajectory(screen, tank, angle_deg, power, wind, color=(255, 0, 0)):
     vx = v * math.cos(angle)
     vy = -v * math.sin(angle)
 
+
+
     points = []
     g = 4.6
 
