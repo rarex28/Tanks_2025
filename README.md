@@ -28,8 +28,9 @@ Proiectul permite mai multor jucători să se confrunte pe un teren generat proc
    git clone git clone https://github.com/rarex28/Tanks_2025.git
    cd Tanks_2025
 2.Instalează dependențele:
-  '''bash
-  pip install pygame
+   ```bash
+   pip install pygame
+
 
 
 
