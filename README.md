@@ -5,8 +5,7 @@ Proiectul permite mai multor jucători să se confrunte pe un teren generat proc
 Caracteristici:	                                                                                                                                                                                               
     -Teren generat cu funcții trigonometrice pentru diversitate;                                                                                                                                               
     -Traiectorii curbate influențate de un sistem de vânt;                                                                                                                                                     
-    -Patru tipuri de arme cu rază și putere diferită:
-        Missle,
+    -Patru tipuri de arme cu rază și putere diferită:                                                                                                                                                                  Missle,
         Severe Missle,
         Small Atom Bomb,
         Atom Bomb; 
