@@ -30,7 +30,7 @@ def draw_trajectory(screen, tank, angle_deg, power, wind, color=(255, 0, 0)):
         pygame.draw.circle(screen, color, point, 2)
 
 
-
+ #functia principala
 async def main():
     pygame.init()
     screen = pygame.display.set_mode((895, 600))
