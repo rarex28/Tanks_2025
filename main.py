@@ -6,7 +6,7 @@ import sys
 import asyncio
 import math
 
-  #desenam traiectoria
+  #desenam traiectoria1
 def draw_trajectory(screen, tank, angle_deg, power, wind, color=(255, 0, 0)):
     x0, y0 = tank.x, tank.y
     angle = math.radians(angle_deg)
