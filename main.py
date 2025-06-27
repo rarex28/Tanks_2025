@@ -14,7 +14,7 @@ def draw_trajectory(screen, tank, angle_deg, power, wind, color=(255, 0, 0)):
     vy = -v * math.sin(angle)
 
     points = []
-    g = 5
+    g = 3.8
 
     for t in range(0, 120): #pana la 2 secunde cu pas de 0.1
         time_sec = t * 0.1
