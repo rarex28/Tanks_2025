@@ -1,4 +1,4 @@
-# Tanks Game 🎯🚀
+# Tanks 🎯🚀
 
 Un joc 2D cu tancuri inspirat de clasicul **Tanks**, dezvoltat în **Python** folosind biblioteca **Pygame**.
 
