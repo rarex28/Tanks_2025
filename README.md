@@ -3,7 +3,7 @@ Este un joc 2D cu tancuri inspirat de clasicul Tanks, dezvoltat în Python folos
 Proiectul permite mai multor jucători să se confrunte pe un teren generat procedural, utilizând diferite tipuri de arme, afectate de factori externi precum direcția și intensitatea vântului.
                                                                                                                                                                                                 
 Caracteristici:	                                                                                                                                                                                               
-    -Teren generat cu funcții trigonometrice pentru diversitate;
+    -Teren generat cu funcții trigonometrice pentru diversitate;                                                                                                                                               
     -Traiectorii curbate influențate de un sistem de vânt;
     -Patru tipuri de arme cu rază și putere diferită:
         Missle,
