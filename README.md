@@ -25,7 +25,7 @@ Proiectul permite mai multor jucători să se confrunte pe un teren generat proc
 
 1. Clonează repository-ul:
    ```bash
-   git clone https://github.com/numele-tau/tanks-game.git
+   git clone https://github.com/rarex28/tanks-game.git
    cd tanks-game
 
 
